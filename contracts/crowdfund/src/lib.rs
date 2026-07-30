@@ -76,6 +76,7 @@ mod types;
 mod validation;
 mod views;
 
+pub(crate) use validation::*;
 pub use errors::ContractError;
 pub use security::{AccessControl, CircuitBreaker, InputValidator, RateLimiter, ReentrancyGuard};
 pub use storage::{
@@ -1650,7 +1651,7 @@ impl CrowdfundContract {
         let token_client = token::Client::new(&env, &token_address);
 
         // Cap batch size to avoid resource exhaustion
-        let limit = (contributors.len() as u32).min(MAX_BATCH_REFUND_SIZE);
+        let limit = contributors.len().min(MAX_BATCH_REFUND_SIZE);
         let mut refunded: u32 = 0;
 
         for contributor in contributors.iter().take(limit as usize) {
